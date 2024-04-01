@@ -8,12 +8,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<CodeBlogDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("CodeBlogConnectionString")));
-builder.Services.AddDbContext<AuthDbContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("CodeBlogAuthDbConnectionString")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("CodeBlogConnectionString"))); 
+
+//if want to use another db  for the identity
+
+/*builder.Services.AddDbContext<AuthDbContext>(options => 
+options.UseSqlServer(builder.Configuration.GetConnectionString("CodeBlogAuthDbConnectionString")));*/
+
+
+//using identity
 builder.Services.AddIdentity<IdentityUser,IdentityRole>().
-    AddEntityFrameworkStores<AuthDbContext>();
+    AddEntityFrameworkStores<CodeBlogDbContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -41,7 +48,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-/*app.UseAuthentication();*/
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

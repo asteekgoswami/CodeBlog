@@ -39,6 +39,7 @@ namespace CodeBlog.Repositories.Implementation
         public async  Task<IEnumerable<BlogPost>> GetAllAsync()
         {
             return await dbContext.BlogPosts.Include(x=>x.Tags).ToListAsync();
+        
         }
 
         public async Task<BlogPost?> GetAsync(Guid id)

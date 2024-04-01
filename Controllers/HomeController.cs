@@ -1,11 +1,13 @@
 using CodeBlog.Models;
 using CodeBlog.Models.ViewModels;
 using CodeBlog.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace CodeBlog.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

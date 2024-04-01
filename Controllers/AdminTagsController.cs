@@ -2,12 +2,14 @@
 using CodeBlog.Models.Domain;
 using CodeBlog.Models.ViewModels;
 using CodeBlog.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeBlog.Controllers
 {
-    public class AdminTagsController : Controller
+	[Authorize(Roles = "Admin")]
+	public class AdminTagsController : Controller
     {
         private  readonly ITagInterface tagRepository;
 

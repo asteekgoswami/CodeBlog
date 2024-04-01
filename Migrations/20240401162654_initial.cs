@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
-namespace CodeBlog.Migrations.AuthDb
+namespace CodeBlog.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,6 +48,39 @@ namespace CodeBlog.Migrations.AuthDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BlogPosts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Heading = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PageTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FeaturedImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UrlHandle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PublishedDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Visible = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlogPosts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,29 +189,28 @@ namespace CodeBlog.Migrations.AuthDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "BlogPostTag",
+                columns: table => new
                 {
-                    { "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c", "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c", "SuperAdmin", "SuperAdmin" },
-                    { "96ee7040-dbcd-44d4-a18f-d8b58eb3206f", "96ee7040-dbcd-44d4-a18f-d8b58eb3206f", "Admin", "Admin" },
-                    { "db2309f0-c714-498f-9c34-2684143f3929", "db2309f0-c714-498f-9c34-2684143f3929", "User", "User" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "a892b811-80bd-4e68-b3b7-0df95a0de725", 0, "d0e0fcf1-d7b2-45c9-a5e2-dfc58931f2b9", "superadmin@gmail.com", false, false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEFVAWX4KS7cjN/eFUPpsSnGgNWkGvI6WcSIMORaSC2G49vwulODec2EK2j1bOezXSw==", null, false, "38c98570-5102-4f73-b56d-773c5404542b", false, "superadmin@gmail.com" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[,]
+                    BlogPostsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TagsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
                 {
-                    { "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c", "a892b811-80bd-4e68-b3b7-0df95a0de725" },
-                    { "96ee7040-dbcd-44d4-a18f-d8b58eb3206f", "a892b811-80bd-4e68-b3b7-0df95a0de725" },
-                    { "db2309f0-c714-498f-9c34-2684143f3929", "a892b811-80bd-4e68-b3b7-0df95a0de725" }
+                    table.PrimaryKey("PK_BlogPostTag", x => new { x.BlogPostsId, x.TagsId });
+                    table.ForeignKey(
+                        name: "FK_BlogPostTag_BlogPosts_BlogPostsId",
+                        column: x => x.BlogPostsId,
+                        principalTable: "BlogPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BlogPostTag_Tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -221,6 +251,11 @@ namespace CodeBlog.Migrations.AuthDb
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogPostTag_TagsId",
+                table: "BlogPostTag",
+                column: "TagsId");
         }
 
         /// <inheritdoc />
@@ -242,10 +277,19 @@ namespace CodeBlog.Migrations.AuthDb
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BlogPostTag");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "BlogPosts");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
         }
     }
 }

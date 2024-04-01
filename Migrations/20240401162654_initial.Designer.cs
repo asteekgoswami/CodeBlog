@@ -4,16 +4,19 @@ using CodeBlog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CodeBlog.Migrations.AuthDb
+namespace CodeBlog.Migrations
 {
-    [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(CodeBlogDbContext))]
+    [Migration("20240401162654_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,78 @@ namespace CodeBlog.Migrations.AuthDb
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BlogPostTag", b =>
+                {
+                    b.Property<Guid>("BlogPostsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BlogPostsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("BlogPostTag");
+                });
+
+            modelBuilder.Entity("CodeBlog.Models.Domain.BlogPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FeaturedImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PageTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublishedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShortDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlHandle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Visible")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BlogPosts");
+                });
+
+            modelBuilder.Entity("CodeBlog.Models.Domain.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -47,29 +122,6 @@ namespace CodeBlog.Migrations.AuthDb
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "96ee7040-dbcd-44d4-a18f-d8b58eb3206f",
-                            ConcurrencyStamp = "96ee7040-dbcd-44d4-a18f-d8b58eb3206f",
-                            Name = "Admin",
-                            NormalizedName = "Admin"
-                        },
-                        new
-                        {
-                            Id = "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c",
-                            ConcurrencyStamp = "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c",
-                            Name = "SuperAdmin",
-                            NormalizedName = "SuperAdmin"
-                        },
-                        new
-                        {
-                            Id = "db2309f0-c714-498f-9c34-2684143f3929",
-                            ConcurrencyStamp = "db2309f0-c714-498f-9c34-2684143f3929",
-                            Name = "User",
-                            NormalizedName = "User"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -160,24 +212,6 @@ namespace CodeBlog.Migrations.AuthDb
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a892b811-80bd-4e68-b3b7-0df95a0de725",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d0e0fcf1-d7b2-45c9-a5e2-dfc58931f2b9",
-                            Email = "superadmin@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "SUPERADMIN@GMAIL.COM",
-                            NormalizedUserName = "SUPERADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFVAWX4KS7cjN/eFUPpsSnGgNWkGvI6WcSIMORaSC2G49vwulODec2EK2j1bOezXSw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "38c98570-5102-4f73-b56d-773c5404542b",
-                            TwoFactorEnabled = false,
-                            UserName = "superadmin@gmail.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -240,23 +274,6 @@ namespace CodeBlog.Migrations.AuthDb
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "a892b811-80bd-4e68-b3b7-0df95a0de725",
-                            RoleId = "96ee7040-dbcd-44d4-a18f-d8b58eb3206f"
-                        },
-                        new
-                        {
-                            UserId = "a892b811-80bd-4e68-b3b7-0df95a0de725",
-                            RoleId = "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c"
-                        },
-                        new
-                        {
-                            UserId = "a892b811-80bd-4e68-b3b7-0df95a0de725",
-                            RoleId = "db2309f0-c714-498f-9c34-2684143f3929"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -276,6 +293,21 @@ namespace CodeBlog.Migrations.AuthDb
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BlogPostTag", b =>
+                {
+                    b.HasOne("CodeBlog.Models.Domain.BlogPost", null)
+                        .WithMany()
+                        .HasForeignKey("BlogPostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CodeBlog.Models.Domain.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

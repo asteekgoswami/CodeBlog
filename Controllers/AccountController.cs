@@ -35,7 +35,7 @@ namespace CodeBlog.Controllers
                 var roleIdentityResult = await userManager.AddToRoleAsync(identityUser,"User");
                 if(roleIdentityResult.Succeeded) {
                     //show success notification
-                    return RedirectToAction("Register");
+                    return RedirectToAction("Login");
                 }
             }
 
@@ -53,21 +53,27 @@ namespace CodeBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
-           var signInResult = await signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, false, false);
-            if(signInResult != null && signInResult.Succeeded)
-            {
-                if(!string.IsNullOrWhiteSpace(loginViewModel.ReturnUrl))
-                {
-                    return RedirectToPage(loginViewModel.ReturnUrl);
-                }
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
 
-                //show errors
-                return View();
-            }
+           if(ModelState.IsValid)
+            {
+				var signInResult = await signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, false, false);
+				if (signInResult != null && signInResult.Succeeded)
+				{
+					if (!string.IsNullOrWhiteSpace(loginViewModel.ReturnUrl))
+					{
+						return Redirect(loginViewModel.ReturnUrl);
+					}
+					return RedirectToAction("Index", "Home");
+				}
+				else
+				{
+
+					//show errors
+					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+					return View(loginViewModel);
+				}
+			}
+           return View(loginViewModel);
         }
 
         [HttpGet]
