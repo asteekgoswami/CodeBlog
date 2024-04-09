@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CodeBlog.Migrations
 {
     /// <inheritdoc />
@@ -190,6 +192,25 @@ namespace CodeBlog.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BlogPostLike",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BlogPostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlogPostLike", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BlogPostLike_BlogPosts_BlogPostId",
+                        column: x => x.BlogPostId,
+                        principalTable: "BlogPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BlogPostTag",
                 columns: table => new
                 {
@@ -211,6 +232,31 @@ namespace CodeBlog.Migrations
                         principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c", "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c", "SuperAdmin", "SuperAdmin" },
+                    { "96ee7040-dbcd-44d4-a18f-d8b58eb3206f", "96ee7040-dbcd-44d4-a18f-d8b58eb3206f", "Admin", "Admin" },
+                    { "db2309f0-c714-498f-9c34-2684143f3929", "db2309f0-c714-498f-9c34-2684143f3929", "User", "User" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "a892b811-80bd-4e68-b3b7-0df95a0de725", 0, "9a949bfe-70eb-476a-a4f6-5d712c46c315", "superadmin@gmail.com", false, false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEP3eSoxRp4Bp3wXiu5nzC1e2a5D/wnrZTuJheX6ql6w9WLzCkDSb4ZGyNw0O8pwayA==", null, false, "0661f01d-ec20-4db9-b1de-6d573c58f69b", false, "superadmin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "70e9f6d7-14fb-4221-9dc4-45fe2167cf0c", "a892b811-80bd-4e68-b3b7-0df95a0de725" },
+                    { "96ee7040-dbcd-44d4-a18f-d8b58eb3206f", "a892b811-80bd-4e68-b3b7-0df95a0de725" },
+                    { "db2309f0-c714-498f-9c34-2684143f3929", "a892b811-80bd-4e68-b3b7-0df95a0de725" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -253,6 +299,11 @@ namespace CodeBlog.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BlogPostLike_BlogPostId",
+                table: "BlogPostLike",
+                column: "BlogPostId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BlogPostTag_TagsId",
                 table: "BlogPostTag",
                 column: "TagsId");
@@ -275,6 +326,9 @@ namespace CodeBlog.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "BlogPostLike");
 
             migrationBuilder.DropTable(
                 name: "BlogPostTag");

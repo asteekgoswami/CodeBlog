@@ -34,6 +34,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddScoped<ITagInterface,TagRepository>();
 builder.Services.AddScoped<IBlogPostInterface,BlogPostRepository>();
 builder.Services.AddScoped<IImageInterface,CloudinaryImageRepository>();
+builder.Services.AddScoped<IBlogPostLikeInterface,BlogPostLikeRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

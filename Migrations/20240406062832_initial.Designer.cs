@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeBlog.Migrations
 {
     [DbContext(typeof(CodeBlogDbContext))]
-    [Migration("20240401162915_initial_1")]
-    partial class initial_1
+    [Migration("20240406062832_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,25 @@ namespace CodeBlog.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BlogPosts");
+                });
+
+            modelBuilder.Entity("CodeBlog.Models.Domain.BlogPostLike", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BlogPostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.ToTable("BlogPostLike");
                 });
 
             modelBuilder.Entity("CodeBlog.Models.Domain.Tag", b =>
@@ -241,15 +260,15 @@ namespace CodeBlog.Migrations
                         {
                             Id = "a892b811-80bd-4e68-b3b7-0df95a0de725",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2c98d77c-b1a4-4ff2-80d2-5c61485f32cc",
+                            ConcurrencyStamp = "9a949bfe-70eb-476a-a4f6-5d712c46c315",
                             Email = "superadmin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPERADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEC3ADcWLMrdGWoQ2xDnRpeaT9C+hE+mh9yFPnn8M/uCj5Bb+s9aqydUAOBk26HHOZw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP3eSoxRp4Bp3wXiu5nzC1e2a5D/wnrZTuJheX6ql6w9WLzCkDSb4ZGyNw0O8pwayA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0527f06b-d3d1-4cc2-88e4-fd83b8508614",
+                            SecurityStamp = "0661f01d-ec20-4db9-b1de-6d573c58f69b",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@gmail.com"
                         });
@@ -368,6 +387,15 @@ namespace CodeBlog.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CodeBlog.Models.Domain.BlogPostLike", b =>
+                {
+                    b.HasOne("CodeBlog.Models.Domain.BlogPost", null)
+                        .WithMany("Likes")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -417,6 +445,11 @@ namespace CodeBlog.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CodeBlog.Models.Domain.BlogPost", b =>
+                {
+                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }
