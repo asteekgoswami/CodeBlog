@@ -1,7 +1,7 @@
 ﻿using CodeBlog.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Http;
 namespace CodeBlog.Controllers
 {
     public class AccountController : Controller
@@ -44,10 +44,11 @@ namespace CodeBlog.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string ReturnUrl )
+        public IActionResult Login(string returnUrl )
         {
-            var model = new LoginViewModel { ReturnUrl = ReturnUrl };
-            return View(model);
+			
+			var model = new LoginViewModel { ReturnUrl = returnUrl };
+			return View(model);
         }
 
         [HttpPost]
