@@ -22,7 +22,9 @@ namespace CodeBlog.Repositories.Implementation
 
 		public async Task<IEnumerable<BlogPostComment>> GetCommentsByBlogIdAsync(Guid blogPostId)
 		{
-			return await dbContext.BlogPostComment.Where(x=>x.BlogPostId==blogPostId).ToListAsync();	
+			var comments = await dbContext.BlogPostComment.Where(x=>x.BlogPostId==blogPostId).ToListAsync();	
+			comments.Reverse();
+			return comments;
 		}
 	}
 }
