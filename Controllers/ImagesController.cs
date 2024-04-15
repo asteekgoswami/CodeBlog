@@ -28,5 +28,12 @@ namespace CodeBlog.Controllers
             return new JsonResult(new {link =imageyUrl});
 
         }
+
+
+        [HttpGet("Testing")]
+        public async Task<IActionResult> Testing()
+        {
+            return Ok("Testing the api");
+        }
     }
 } 

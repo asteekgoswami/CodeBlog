@@ -21,6 +21,12 @@ namespace CodeBlog.Repositories.Implementation
 			return blogPostLike;
 		}
 
+		public  async Task<IEnumerable<BlogPostLike>> GetLikesForBlog(Guid blogPostId)
+		{
+			return  await codeBlogDbContext.BlogPostLike.Where(x=>x.BlogPostId==blogPostId).ToListAsync();
+
+		}
+
 		public async Task<int> GetTotalLikes(Guid blogPostId)
 		{
 			var likes = await codeBlogDbContext.BlogPostLike.CountAsync(x=>x.BlogPostId==blogPostId);

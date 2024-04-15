@@ -4,6 +4,7 @@ using CodeBlog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeBlog.Migrations
 {
     [DbContext(typeof(CodeBlogDbContext))]
-    partial class CodeBlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240409053357_trainee-initial")]
+    partial class traineeinitial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,32 +76,6 @@ namespace CodeBlog.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BlogPosts");
-                });
-
-            modelBuilder.Entity("CodeBlog.Models.Domain.BlogPostComment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BlogPostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogPostId");
-
-                    b.ToTable("BlogPostComment");
                 });
 
             modelBuilder.Entity("CodeBlog.Models.Domain.BlogPostLike", b =>
@@ -283,15 +260,15 @@ namespace CodeBlog.Migrations
                         {
                             Id = "a892b811-80bd-4e68-b3b7-0df95a0de725",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "205e5825-0872-4e6f-808a-b6f10cc496c5",
+                            ConcurrencyStamp = "b9c5015d-dc0b-4193-a92f-b705be0ff1b5",
                             Email = "superadmin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPERADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEH2ifYgiUpmPVnP0U1hTyJxwI/dJjLsL0FLlNGBt4tUQI8UnloWcijxO/qBC5BKPvA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELWdwWQe/mAVz01MUpJILukIbg/FYS5/pa2IcRUzV8sfFdoA0BGLKUlOvuyOk1Kexg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dc7d9e29-5390-4ce0-89ae-3c892d06bf65",
+                            SecurityStamp = "1395b4a0-0781-411e-b477-5470a1d57a28",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@gmail.com"
                         });
@@ -410,15 +387,6 @@ namespace CodeBlog.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CodeBlog.Models.Domain.BlogPostComment", b =>
-                {
-                    b.HasOne("CodeBlog.Models.Domain.BlogPost", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("BlogPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("CodeBlog.Models.Domain.BlogPostLike", b =>
                 {
                     b.HasOne("CodeBlog.Models.Domain.BlogPost", null)
@@ -481,8 +449,6 @@ namespace CodeBlog.Migrations
 
             modelBuilder.Entity("CodeBlog.Models.Domain.BlogPost", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
