@@ -23,21 +23,26 @@ namespace CodeBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
-            var identityUser = new IdentityUser
+
+            if (ModelState.IsValid)
             {
-                UserName = registerViewModel.Username,
-                Email = registerViewModel.Email
-            };
-            var identityResult = await userManager.CreateAsync(identityUser, registerViewModel.Password);
-            if(identityResult.Succeeded)
-            {
-                //assign the user user role
-                var roleIdentityResult = await userManager.AddToRoleAsync(identityUser,"User");
-                if(roleIdentityResult.Succeeded) {
-                    //show success notification
-                    return RedirectToAction("Login");
-                }
-            }
+				var identityUser = new IdentityUser
+				{
+					UserName = registerViewModel.Username,
+					Email = registerViewModel.Email
+				};
+				var identityResult = await userManager.CreateAsync(identityUser, registerViewModel.Password);
+				if (identityResult.Succeeded)
+				{
+					//assign the user user role
+					var roleIdentityResult = await userManager.AddToRoleAsync(identityUser, "User");
+					if (roleIdentityResult.Succeeded)
+					{
+						//show success notification
+						return RedirectToAction("Login");
+					}
+				}
+			}
 
             //show error notification
             return View();

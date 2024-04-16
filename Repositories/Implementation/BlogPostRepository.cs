@@ -2,6 +2,7 @@
 using CodeBlog.Models.Domain;
 using CodeBlog.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CodeBlog.Repositories.Implementation
 {
@@ -36,9 +37,30 @@ namespace CodeBlog.Repositories.Implementation
             }
         }
 
-        public async  Task<IEnumerable<BlogPost>> GetAllAsync()
+        public async  Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery, string? tag)
         {
-            return await dbContext.BlogPosts.Include(x=>x.Tags).ToListAsync();
+            var query = dbContext.BlogPosts.Include(x=>x.Tags).AsQueryable();
+
+
+            //filtering
+            if (string.IsNullOrWhiteSpace(searchQuery) == false)
+            {
+                query = query.Where(x => x.PageTitle.Contains(searchQuery) || x.Heading.Contains(searchQuery) || x.Content.Contains(searchQuery) || x.Author.Contains(searchQuery) || x.ShortDescription.Contains(searchQuery) || x.UrlHandle.Contains(searchQuery));
+
+                
+
+            }
+
+            if (!string.IsNullOrWhiteSpace(tag))
+            {
+                query = query.Where(x => x.Tags.Any(t => t.Name == tag));
+            }
+
+
+
+
+            return await query.ToListAsync();
+            /*return await dbContext.BlogPosts.Include(x=>x.Tags).ToListAsync();*/
         
         }
 

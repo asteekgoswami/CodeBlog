@@ -21,10 +21,16 @@ namespace CodeBlog.Controllers
 			this.tagRepository = tagRepository;
 		}
 
-        public async Task<IActionResult> Index()
+
+        [HttpGet]
+        public async Task<IActionResult> Index(string ? searchQuery , string ? tag)
         {
+            ViewBag.SearchQuery = searchQuery;
+            ViewBag.Tag = tag;
+
+
             //getting all blogs
-            var blogPosts = await blogPostReposiory.GetAllAsync();
+            var blogPosts = await blogPostReposiory.GetAllAsync(searchQuery,tag);
 
             //getting all tags
             var tags = await tagRepository.GetAllAsync();

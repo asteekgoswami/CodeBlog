@@ -77,6 +77,7 @@ namespace CodeBlog.Controllers
 			return View();
 		}
 
+
 		[HttpPost]
 		public async Task<IActionResult> Delete(Guid id)
 		{

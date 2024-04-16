@@ -29,13 +29,34 @@
             {
                 foreach(var tag in Model.Tags)
                 {
-                    <span class="badge bg-dark me-1">@tag.Name</span>
+                    @* <span class="badge bg-dark me-1"></span> *@
+                    <span>
+                        <a class="badge bg-dark me-1 text-decoration-none" asp-controller="Home" asp-action="Index" asp-route-tag="@tag.Name">@tag.Name</a>
+                    </span>
                 }
             }
         </div>
 
     </div>
 </div>
+
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <!-- Added row and justify-content-center -->
+        <div class="col-md-6">
+            <!-- Adjusted column width to center the form -->
+            <form method="get" asp-controller="Home" asp-action="Index">
+                <div class="input-group mb-3">
+                    <!-- Added input-group for better alignment -->
+                    <input type="text" class="form-control" name="searchQuery" value="@ViewBag.SearchQuery" />
+                    <button type="submit" class="btn btn-warning">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <div class="container">
     <div class="row justify-content-center">

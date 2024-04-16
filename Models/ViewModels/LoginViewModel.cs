@@ -1,9 +1,17 @@
-﻿namespace CodeBlog.Models.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CodeBlog.Models.ViewModels
 {
 	public class LoginViewModel
 	{
+		[Required]
 		public string Username { get; set; }
+
+		[Required]
+		[MinLength(6, ErrorMessage = "Password has to be least 6 characters")]
 		public string Password { get; set; }
+
+
         public string? ReturnUrl { get; set; }
     }
 }

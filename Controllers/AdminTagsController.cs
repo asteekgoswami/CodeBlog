@@ -28,6 +28,8 @@ namespace CodeBlog.Controllers
         [HttpPost]
         public async Task<IActionResult>  Add(AddTagRequest addTagRequest)
         {
+
+            ValidateAddTagRequest(addTagRequest);
            if(ModelState.IsValid)
             {
                 //Mapping AddTagRequest to Tag Domain Model
@@ -46,12 +48,35 @@ namespace CodeBlog.Controllers
             }
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string? searchQuery, string ? shortBy, string? sortDirection, int pageSize=2, int pageNumber=1)
         {
-            var tags = await  tagRepository.GetAllAsync();
+            var totalRecords = await tagRepository.CountAsync();
+            var totalPages = Math.Ceiling((decimal)totalRecords / pageSize);
+
+            if (pageNumber > totalPages)
+            {
+                pageNumber--;
+            }
+
+            if (pageNumber < 1)
+            {
+                pageNumber++;
+            }
+
+            //to remain the searchquery in the search input after searching
+            ViewBag.SearchQuery = searchQuery;
+            ViewBag.ShortBy = shortBy;
+            ViewBag.SortDirection = sortDirection;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+            ViewBag.PageNumber = pageNumber;
+
+            var tags = await  tagRepository.GetAllAsync(searchQuery,shortBy,sortDirection, pageSize, pageNumber);
             return View(tags);
         }
+
 
         [HttpGet]
         //name of input parameter id is matched with the route parameter i.e asp-route-id
@@ -70,6 +95,7 @@ namespace CodeBlog.Controllers
             }
             return View(null) ;
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditTagRequest editTagRequest)
@@ -110,5 +136,24 @@ namespace CodeBlog.Controllers
                 return RedirectToAction("Edit", new { id = editTagRequest.Id });
             }
         }
-    }
+
+
+
+        /// <summary>
+        /// Custom Validation method to validate the name and display name of the tag model 
+        /// then add the validation message
+        /// </summary>
+        /// <param name="addTagRequest"></param>
+        private void ValidateAddTagRequest(AddTagRequest addTagRequest)
+        {
+            if(addTagRequest.Name is not null && addTagRequest.DisplayName is not null)
+            {
+                if(addTagRequest.Name==addTagRequest.DisplayName)
+                {
+                    ModelState.AddModelError("DisplayName", "Name and DisplayName cannot be same");
+                }
+            }
+        }
+
+	}
 }
