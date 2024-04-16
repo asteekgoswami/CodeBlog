@@ -43,6 +43,19 @@ namespace CodeBlog.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SearchByTag(string ? tag, string? searchQuery)
+        {
+            ViewBag.SearchQuery = searchQuery;
+            ViewBag.Tag = tag;
+            //getting all blogs
+            var blogPosts = await blogPostReposiory.GetAllByTagPageAsync( tag, searchQuery);
+
+            return View(blogPosts);
+
+
+        }
+
         public IActionResult Privacy()
         {
             return View();

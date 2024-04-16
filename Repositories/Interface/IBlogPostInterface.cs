@@ -15,5 +15,7 @@ namespace CodeBlog.Repositories.Interface
         Task<BlogPost?> UpdateAsync(BlogPost blogPost);
 
         Task<BlogPost?> DeleteAsync(Guid id);
+
+        Task<IEnumerable<BlogPost>> GetAllByTagPageAsync(string? tag=null , string? serachQuery=null);
     }
 }

@@ -51,6 +51,7 @@ namespace CodeBlog.Repositories.Implementation
 
             }
 
+            //for tag
             if (!string.IsNullOrWhiteSpace(tag))
             {
                 query = query.Where(x => x.Tags.Any(t => t.Name == tag));
@@ -63,6 +64,33 @@ namespace CodeBlog.Repositories.Implementation
             /*return await dbContext.BlogPosts.Include(x=>x.Tags).ToListAsync();*/
         
         }
+
+
+        /// <summary>
+        /// for the seperate page which coes after search by tag
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<BlogPost>> GetAllByTagPageAsync(string? tag, string? searchQuery)
+        {
+            var query = dbContext.BlogPosts.Include(x => x.Tags).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(tag))
+            {
+                query = query.Where(x => x.Tags.Any(t => t.Name == tag));
+            }
+
+            //filtering
+            if (string.IsNullOrWhiteSpace(searchQuery) == false)
+            {
+                query = query.Where(x => x.PageTitle.Contains(searchQuery) || x.Heading.Contains(searchQuery) || x.Content.Contains(searchQuery) || x.Author.Contains(searchQuery) || x.ShortDescription.Contains(searchQuery) || x.UrlHandle.Contains(searchQuery));
+
+            }
+            return await query.ToListAsync();
+        }
+
+
 
         public async Task<BlogPost?> GetAsync(Guid id)
         {
