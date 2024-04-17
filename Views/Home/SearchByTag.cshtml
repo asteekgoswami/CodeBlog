@@ -8,7 +8,7 @@
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form method="get" asp-controller="Home" asp-action="Index">
+            <form method="get" asp-controller="Home" asp-action="SearchByTag">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" name="searchQuery" value="@ViewBag.SearchQuery" />
                     <button type="submit" class="btn btn-warning">Search</button>
@@ -43,6 +43,12 @@
                         </div>
                     </div>
                 }
+            }
+            else
+            {
+                <div class="container">
+                    <p>No Result Found !</p>
+                </div>
             }
         </div>
     </div>

@@ -37,33 +37,36 @@ namespace CodeBlog.Repositories.Implementation
             }
         }
 
-        public async  Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery, string? tag)
+        public async Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery, string? tag, string? selectedDate)
         {
-            var query = dbContext.BlogPosts.Include(x=>x.Tags).AsQueryable();
+            var query = dbContext.BlogPosts.Include(x => x.Tags).AsQueryable();
 
-
-            //filtering
-            if (string.IsNullOrWhiteSpace(searchQuery) == false)
+            // Filtering
+            if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                query = query.Where(x => x.PageTitle.Contains(searchQuery) || x.Heading.Contains(searchQuery) || x.Content.Contains(searchQuery) || x.Author.Contains(searchQuery) || x.ShortDescription.Contains(searchQuery) || x.UrlHandle.Contains(searchQuery));
-
-                
-
+                query = query.Where(x => x.PageTitle.Contains(searchQuery) ||
+                                         x.Heading.Contains(searchQuery) ||
+                                         x.Content.Contains(searchQuery) ||
+                                         x.Author.Contains(searchQuery) ||
+                                         x.ShortDescription.Contains(searchQuery) ||
+                                         x.UrlHandle.Contains(searchQuery));
             }
 
-            //for tag
+            if (!string.IsNullOrWhiteSpace(selectedDate))
+            {
+                query = query.Where(x => x.PublishedDate == selectedDate);
+            }
+
+            // For tag
             if (!string.IsNullOrWhiteSpace(tag))
             {
                 query = query.Where(x => x.Tags.Any(t => t.Name == tag));
             }
 
-
-
-
+            query = query.OrderByDescending(x => x.PublishedDate);
             return await query.ToListAsync();
-            /*return await dbContext.BlogPosts.Include(x=>x.Tags).ToListAsync();*/
-        
         }
+
 
 
         /// <summary>
@@ -87,6 +90,9 @@ namespace CodeBlog.Repositories.Implementation
                 query = query.Where(x => x.PageTitle.Contains(searchQuery) || x.Heading.Contains(searchQuery) || x.Content.Contains(searchQuery) || x.Author.Contains(searchQuery) || x.ShortDescription.Contains(searchQuery) || x.UrlHandle.Contains(searchQuery));
 
             }
+
+            //reverse the list
+            query = query.OrderByDescending(x => x.PublishedDate);
             return await query.ToListAsync();
         }
 

@@ -3,33 +3,38 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="container col-xxl-8 px-4 py-5">
-    <div class="row align-items-center g-5 py-5">
-        <div class="col-12 col-lg-6">
-            <h1 class="display-5 fw-bold lh-1 mb-3">CodeBlog - The Dev Blog</h1>
-            <p class="lead">CodeBlog covers the topic like JS , Asp.Net , Asp.Net Web API etc.</p>
+
+
+
+<div class="container-fluid vh-100 vw-100 d-flex justify-content-center align-items-center px-4 py-5">
+    <div class="row align-items-center g-5 h-100">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold lh-1 mb-3" style="font-size: 4rem;">
+                <span style="color: #0EA5E9; font-size: inherit;">CodeBlog</span> - Dive into Insightful<br /> Coding Articles<br />
+                <img src="~/rocket.svg" alt="Icon" width="80" height="80">
+            </h1>
+
+            <div class="mb-5"></div><!-- Add space between h1 and p -->
+            <p class="lead text-center text-muted fs-5" style="font-weight: 700;">
+                Dive into <span class="text-dark font-weight-bold">JavaScript</span>, <span class="text-dark font-weight-bold">ASP.NET</span>, <span class="text-dark font-weight-bold">Web API,</span> and more with <span class="text-dark font-weight-bold">CodeBlog</span>
+            </p>
+            <div class="mb-5"></div><!-- Add space between h1 and p -->
+            <a href="#" class="btn btn-dark mt-3 " style="font-size:1.3rem;">Explore Now <i class="bi bi-arrow-right text-white m-2"></i></a>
         </div>
-
-
-       @*  right hand side *@
-       @*  <div class="col-12 col-lg-6">
-            <img src="https://res.cloudinary.com/dauoezlnr/image/upload/v1711882213/lupvbsqgse6mpilj1rv9.png" alt="CodeBlog - Dev Blog" class="d-block mx-lg-auto img-fluid" width="300" />
-        </div> *@
 
     </div>
 </div>
 
 
 
-
-<div class="container mb-5">
+@* <div class="container mb-5">
     <div class="row justify-content-center">
         <div class="col-6 d-flex">
             @if(Model !=null && Model.Tags.Any())
             {
                 foreach(var tag in Model.Tags)
                 {
-                    @* <span class="badge bg-dark me-1"></span> *@
+                   
                     <span>
                         <a class="badge bg-dark me-1 text-decoration-none" asp-controller="Home" asp-action="SearchByTag" asp-route-tag="@tag.Name">@tag.Name</a>
                     </span>
@@ -38,10 +43,27 @@
         </div>
 
     </div>
+</div> *@
+
+
+@* if want to add tags below banner *@
+@* <div class="container-fluid mb-5 bg-dark text-center p-5">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            @if (Model != null && Model.Tags.Any())
+            {
+                foreach (var tag in Model.Tags)
+                {
+                    <a class="badge bg-light badge-light me-1 mb-1 text-dark text-decoration-none" asp-controller="Home" asp-action="SearchByTag" asp-route-tag="@tag.Name" style="font-size: 1.2rem;">@tag.Name</a>
+                }
+            }
+        </div>
+    </div>
 </div>
+ *@
 
 
-<div class="container mt-5 mb-5">
+@* <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <!-- Added row and justify-content-center -->
         <div class="col-md-6">
@@ -56,11 +78,28 @@
         </div>
     </div>
 </div>
+ *@
+
+
+<div class="container-fluid mb-5 bg-dark text-center p-5">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <form method="get" asp-controller="Home" asp-action="Index">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control m-2" name="searchQuery" placeholder="Search query" value="@ViewBag.SearchQuery" />
+                    <input type="date" class="form-control m-2" name="selectedDate" placeholder="Select date" value="@ViewBag.SelectedDate" id="selectedDate" />
+                    <button type="submit" class="btn btn-warning m-2">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-6">
+        <div class="col-5">
             @if(Model !=null && Model.BlogPosts.Any())
             {
                 foreach(var blogPost in Model.BlogPosts)
@@ -95,6 +134,27 @@
 
                 }
             }
+            else
+            {
+                <p>No Result Found</p>
+            }
         </div>
     </>
 </div>
+
+
+
+
+@section Scripts{
+        <script>
+            // Get today's date
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+
+            // Set min attribute of the date input to today's date
+            document.getElementById('selectedDate').max = today;
+        </script>
+}

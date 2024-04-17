@@ -16,8 +16,8 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow ">
-            <div class="container">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow ">
+            <div class="container p-1 h-6">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CodeBlog</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
                         @if(signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
@@ -51,14 +51,14 @@
                     <div class="d-flex align-items-center">
                         @if (signInManager.IsSignedIn(User))
                         {
-                            <div class='me-3 text-light ms-3' > @User?.Identity?.Name</div>
-                            <a class="btn me-3 bg-light text-dark ms-03" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            <div class='me-3 text-dark ms-3' > @User?.Identity?.Name</div>
+                            <a class="btn me-3 bg-dark text-light ms-03 " asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
 
                         }
                         else
                         {
-                            <a class="btn me-3 bg-light text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                            <a class="btn me-3 bg-light text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            <a class="btn me-3 bg-dark text-light" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="btn me-3 bg-dark text-light" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             
                         }
                        

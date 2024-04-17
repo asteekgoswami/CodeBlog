@@ -23,14 +23,15 @@ namespace CodeBlog.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index(string ? searchQuery , string ? tag)
+        public async Task<IActionResult> Index(string ? searchQuery , string ? tag , string? selectedDate)
         {
             ViewBag.SearchQuery = searchQuery;
             ViewBag.Tag = tag;
+            ViewBag.SelectedDate = selectedDate;
 
 
             //getting all blogs
-            var blogPosts = await blogPostReposiory.GetAllAsync(searchQuery,tag);
+            var blogPosts = await blogPostReposiory.GetAllAsync(searchQuery,tag,selectedDate);
 
             //getting all tags
             var tags = await tagRepository.GetAllAsync();
@@ -43,6 +44,14 @@ namespace CodeBlog.Controllers
             return View(model);
         }
 
+
+
+        /// <summary>
+        /// seperate page for the search by tag
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> SearchByTag(string ? tag, string? searchQuery)
         {
