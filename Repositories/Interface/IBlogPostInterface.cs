@@ -5,6 +5,7 @@ namespace CodeBlog.Repositories.Interface
     public interface IBlogPostInterface
     {
         Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery = null,string?tag=null, string ?selectedDate=null);
+        Task<IEnumerable<BlogPost>> GetLimitedBlogAsync(string? searchQuery = null, string? tag = null, string? selectedDate = null);
 
         Task<BlogPost?> GetAsync(Guid id);
 

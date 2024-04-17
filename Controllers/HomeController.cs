@@ -1,4 +1,5 @@
 using CodeBlog.Models;
+using CodeBlog.Models.Domain;
 using CodeBlog.Models.ViewModels;
 using CodeBlog.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,7 @@ namespace CodeBlog.Controllers
 
 
             //getting all blogs
-            var blogPosts = await blogPostReposiory.GetAllAsync(searchQuery,tag,selectedDate);
+            var blogPosts = await blogPostReposiory.GetLimitedBlogAsync(searchQuery,tag,selectedDate);
 
             //getting all tags
             var tags = await tagRepository.GetAllAsync();
@@ -63,6 +64,29 @@ namespace CodeBlog.Controllers
             return View(blogPosts);
 
 
+        }
+
+
+
+        /// <summary>
+        /// Display All the Blogs We have
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> AllBlogs()
+        {
+            //getting all blogs
+            var blogPosts = await blogPostReposiory.GetAllAsync();
+
+            //getting all tags
+            var tags = await tagRepository.GetAllAsync();
+
+            var model = new HomeViewModel
+            {
+                BlogPosts = blogPosts,
+                Tags = tags
+            };
+            return View(model);
         }
 
         public IActionResult Privacy()

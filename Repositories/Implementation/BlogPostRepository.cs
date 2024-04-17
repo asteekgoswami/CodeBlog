@@ -108,6 +108,39 @@ namespace CodeBlog.Repositories.Implementation
             return await dbContext.BlogPosts.Include(x=>x.Tags).FirstOrDefaultAsync(x=>x.UrlHandle==urlHandle);
         }
 
+        public  async Task<IEnumerable<BlogPost>> GetLimitedBlogAsync(string? searchQuery = null, string? tag = null, string? selectedDate = null)
+        {
+            var query = dbContext.BlogPosts.Include(x => x.Tags).AsQueryable();
+
+            // Filtering
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                query = query.Where(x => x.PageTitle.Contains(searchQuery) ||
+                                         x.Heading.Contains(searchQuery) ||
+                                         x.Content.Contains(searchQuery) ||
+                                         x.Author.Contains(searchQuery) ||
+                                         x.ShortDescription.Contains(searchQuery) ||
+                                         x.UrlHandle.Contains(searchQuery));
+            }
+
+            if (!string.IsNullOrWhiteSpace(selectedDate))
+            {
+                query = query.Where(x => x.PublishedDate == selectedDate);
+            }
+
+            // For tag
+            if (!string.IsNullOrWhiteSpace(tag))
+            {
+                query = query.Where(x => x.Tags.Any(t => t.Name == tag));
+            }
+
+            query = query.OrderByDescending(x => x.PublishedDate).Take(6);
+            return await query.ToListAsync();
+        }
+
+
+
+
         public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
         {
            var existingBlog=  await dbContext.BlogPosts.Include(x=>x.Tags).FirstOrDefaultAsync(x=>x.Id==blogPost.Id);
