@@ -4,7 +4,10 @@ namespace CodeBlog.Repositories.Interface
 {
     public interface IBlogPostInterface
     {
-        Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery = null,string?tag=null, string ?selectedDate=null);
+        Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery = null, string ?selectedDate=null,int pageSize=3,int pageNumber=1);
+
+        Task<IEnumerable<BlogPost>> GetAllBlogsOfThisConditionAsync(string? searchQuery = null, string? selectedDate = null);
+        
         Task<IEnumerable<BlogPost>> GetLimitedBlogAsync(string? searchQuery = null, string? tag = null, string? selectedDate = null);
 
         Task<BlogPost?> GetAsync(Guid id);
@@ -18,5 +21,7 @@ namespace CodeBlog.Repositories.Interface
         Task<BlogPost?> DeleteAsync(Guid id);
 
         Task<IEnumerable<BlogPost>> GetAllByTagPageAsync(string? tag=null , string? serachQuery=null);
+
+        Task<int> CountAllPostAsync();
     }
 }

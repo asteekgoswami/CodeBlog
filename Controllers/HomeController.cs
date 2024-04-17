@@ -1,3 +1,4 @@
+using Azure;
 using CodeBlog.Models;
 using CodeBlog.Models.Domain;
 using CodeBlog.Models.ViewModels;
@@ -73,10 +74,36 @@ namespace CodeBlog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> AllBlogs()
+        public async Task<IActionResult> AllBlogs(string? searchQuery = null, string? selectedDate = null, int pageSize=3, int pageNumber=1)
         {
+            //getting blogs to calculate the total pages based on this condition
+            var allPosts = await blogPostReposiory.GetAllBlogsOfThisConditionAsync(searchQuery, selectedDate);
+
+            var totalPosts = allPosts.Count();
+
+            var totalPages = Math.Ceiling((decimal)totalPosts / pageSize);
+
+            //adding data to view bag
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+            ViewBag.SearchQuery = searchQuery;
+            ViewBag.SelectedDate = selectedDate;
+            
+
+            if (pageNumber > totalPages)
+            {
+                pageNumber--;
+            }
+
+            if (pageNumber < 1)
+            {
+                pageNumber++;
+            }
+
+            
             //getting all blogs
-            var blogPosts = await blogPostReposiory.GetAllAsync();
+            var blogPosts = await blogPostReposiory.GetAllAsync(searchQuery, selectedDate, pageSize, pageNumber);
 
             //getting all tags
             var tags = await tagRepository.GetAllAsync();
@@ -89,10 +116,10 @@ namespace CodeBlog.Controllers
             return View(model);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+
+
+
+       
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -22,6 +22,11 @@ namespace CodeBlog.Repositories.Implementation
             return blogPost;
         }
 
+        public async Task<int> CountAllPostAsync()
+        {
+            return await dbContext.BlogPosts.CountAsync();
+        }
+
         public async Task<BlogPost?> DeleteAsync(Guid id)
         {
             var existingBlog = await dbContext.BlogPosts.FindAsync(id);
@@ -37,7 +42,7 @@ namespace CodeBlog.Repositories.Implementation
             }
         }
 
-        public async Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery, string? tag, string? selectedDate)
+        public async Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery,string? selectedDate,int pageSize=3,int pageNumber=1)
         {
             var query = dbContext.BlogPosts.Include(x => x.Tags).AsQueryable();
 
@@ -57,11 +62,42 @@ namespace CodeBlog.Repositories.Implementation
                 query = query.Where(x => x.PublishedDate == selectedDate);
             }
 
-            // For tag
+            /*// For tag
             if (!string.IsNullOrWhiteSpace(tag))
             {
                 query = query.Where(x => x.Tags.Any(t => t.Name == tag));
+            }*/
+
+
+
+            //pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+            query= query.Skip(skipResults).Take(pageSize);
+
+            query = query.OrderByDescending(x => x.PublishedDate);
+            return await query.ToListAsync();
+        }
+
+        public async  Task<IEnumerable<BlogPost>> GetAllBlogsOfThisConditionAsync(string? searchQuery = null, string? selectedDate = null)
+        {
+            var query = dbContext.BlogPosts.Include(x => x.Tags).AsQueryable();
+
+            // Filtering
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                query = query.Where(x => x.PageTitle.Contains(searchQuery) ||
+                                         x.Heading.Contains(searchQuery) ||
+                                         x.Content.Contains(searchQuery) ||
+                                         x.Author.Contains(searchQuery) ||
+                                         x.ShortDescription.Contains(searchQuery) ||
+                                         x.UrlHandle.Contains(searchQuery));
             }
+
+            if (!string.IsNullOrWhiteSpace(selectedDate))
+            {
+                query = query.Where(x => x.PublishedDate == selectedDate);
+            }
+
 
             query = query.OrderByDescending(x => x.PublishedDate);
             return await query.ToListAsync();
