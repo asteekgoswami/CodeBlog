@@ -1,4 +1,4 @@
-﻿@model CodeBlog.Models.ViewModels.LoginViewModel
+﻿@* @model CodeBlog.Models.ViewModels.LoginViewModel
 @{
 }
 
@@ -37,3 +37,44 @@
 
 
 
+
+ *@
+
+
+
+@model CodeBlog.Models.ViewModels.LoginViewModel
+@{
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                    <h1 class="card-title mb-3">Login</h1>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" id="username" class="form-control" asp-for="Username" required />
+                            <span class="text-danger" asp-validation-for="Username"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" asp-for="Password" required minlength="6" />
+                            <span class="text-danger" asp-validation-for="Password"></span>
+                        </div>
+                        <div class="mb-3 d-grid">
+                            <button type="submit" class="btn btn-dark btn-lg">Login</button>
+                        </div>
+                        <input type="hidden" asp-for="@Model.ReturnUrl" />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </form>
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <div class="error-message">@ViewBag.ErrorMessage</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

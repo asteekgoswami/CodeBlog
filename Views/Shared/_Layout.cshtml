@@ -23,8 +23,8 @@
         }
 
         footer {
-            position: absolute;
-            bottom: 0;
+            position: relative;
+            bottom: 0%;
             width: 100%;
             background-color: #000; /* Dark background color */
             color: #adb5bd; /* Light text color */
@@ -34,9 +34,10 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow ">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow ">
             <div class="container p-1 h-6">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CodeBlog</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: bold; font-size: 24px;">CodeBlog</a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -44,13 +45,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
                         @if(signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Admin
                                 </a>
                                 <ul class="dropdown-menu">
@@ -69,18 +70,16 @@
                     <div class="d-flex align-items-center">
                         @if (signInManager.IsSignedIn(User))
                         {
-                            <div class='me-3 text-dark ms-3' > @User?.Identity?.Name</div>
-                            <a class="btn me-3 bg-dark text-light ms-03 " asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            <div class='me-3 text-light ms-3' > @User?.Identity?.Name</div>
+                            <a class="btn me-3 bg-light text-dark ms-03 " asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
 
                         }
                         else
                         {
-                            <a class="btn me-3 bg-dark text-light" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                            <a class="btn me-3 bg-dark text-light" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            <a class="btn me-3 bg-light text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="btn me-3 bg-light text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             
                         }
-                       
-
                     </div>
                 </div>
             </div>
@@ -92,17 +91,13 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted bg-dark py-3 ">
+    <footer class="border-top footer text-muted bg-dark py-3 mt-3">
         <div class="container">
             <div class="row align-items-center justify-content-center">
-                <!-- Center the content horizontally -->
-                <div class="col-md-6 mb-3 mb-md-0 text-center text-md-start">
-                    <!-- Center the text for smaller screens -->
+                <div class="col-12 col-md-6 mb-3 mb-md-0 text-center text-md-start">
                     <span class="fs-5">&copy; 2024 - CodeBlog</span>
                 </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <!-- Center the icons for smaller screens -->
-                    <!-- Social Media Icons -->
+                <div class="col-12 col-md-6 text-center text-md-end">
                     <a href="#" class="text-white me-3 fs-3" target="_blank"><i class="bi bi-instagram"></i></a>
                     <a href="https://www.linkedin.com/in/asteekgoswami/" class="text-white me-3 fs-3" target="_blank"><i class="bi bi-linkedin"></i></a>
                     <a href="#" class="text-white me-3 fs-3" target="_blank"><i class="bi bi-globe"></i></a>
@@ -111,6 +106,7 @@
             </div>
         </div>
     </footer>
+
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
