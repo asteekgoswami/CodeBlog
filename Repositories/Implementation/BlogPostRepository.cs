@@ -69,12 +69,14 @@ namespace CodeBlog.Repositories.Implementation
             }*/
 
 
+            //for the latest first
+            query = query.OrderByDescending(x => x.PublishedDate);
 
             //pagination
             var skipResults = (pageNumber - 1) * pageSize;
             query= query.Skip(skipResults).Take(pageSize);
 
-            query = query.OrderByDescending(x => x.PublishedDate);
+           
             return await query.ToListAsync();
         }
 

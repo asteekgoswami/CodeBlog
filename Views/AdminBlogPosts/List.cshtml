@@ -1,8 +1,30 @@
 ﻿@model List<CodeBlog.Models.Domain.BlogPost>
-
+@{
+    ViewData["Title"] = "Blogs Page";
+    var nextPage = Convert.ToInt32(ViewBag.PageNumber) + 1;
+    var prevPage = Convert.ToInt32(ViewBag.PageNumber) - 1;
+}
 <div class="bg-secondary bg-opacity-10 py-2">
     <div class="container">
         <h1 class="text-center">All Blog Posts - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container-fluid mb-5  text-center p-2">
+    <div class="row justify-content-md-start m-2">
+        <div class="col-md-10">
+            <form method="get" asp-controller="AdminBlogPosts" asp-action="List" class="row g-3 justify-content-center">
+                <div class="col-md-4 ">
+                    <input type="text" class="form-control" name="searchQuery" placeholder="Search query" value="@ViewBag.SearchQuery" />
+                </div>
+                <div class="col-md-4">
+                    <input type="date" class="form-control" name="selectedDate" value="@ViewBag.SelectedDate" id="selectedDate" />
+                </div>
+                <div class="col-md-2 ">
+                    <button type="submit" class="btn btn-warning btn-block btn-md">Search</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -36,16 +58,56 @@
                                 </div>
                             </td>
                             <td>
-                                <a asp-area="" asp-action="Edit" asp-controller="AdminBlogPosts" asp-route-id="@blogPost.Id" class="btn btn-primary">Edit</a> <!-- Added button class for styling -->
+                                <a asp-area="" asp-action="Edit" asp-controller="AdminBlogPosts" asp-route-id="@blogPost.Id" class="btn btn-dark">Edit</a> <!-- Added button class for styling -->
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
+        <!-- Pagination -->
+        <div class="justify-content-center w-100 ">
+            <nav aria-label="Page navigation example" class="mt-5 mb-5">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(prevPage < 1 ? "disabled" : "")">
+                        <a class="page-link btn btn-dark" asp-controller="AdminBlogPosts" asp-action="List" asp-route-pageNumber="@prevPage" asp-route-pageSize="@ViewBag.PageSize" asp-route-selectedDate="@ViewBag.SelectedDate" asp-route-searchQuery="@ViewBag.SearchQuery">Previous</a>
+                    </li>
+                    @for (var i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
+                            <a class="page-link btn btn-dark" asp-controller="AdminBlogPosts" asp-action="List" asp-route-pageNumber="@i" asp-route-pageSize="@ViewBag.PageSize" asp-route-selectedDate="@ViewBag.SelectedDate" asp-route-searchQuery="@ViewBag.SearchQuery">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(nextPage > ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link btn btn-dark" asp-controller="AdminBlogPosts" asp-action="List" asp-route-pageNumber="@nextPage" asp-route-pageSize="@ViewBag.PageSize" asp-route-selectedDate="@ViewBag.SelectedDate" asp-route-searchQuery="@ViewBag.SearchQuery">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
     }
     else
     {
         <p class="text-center">No Blog Found!</p> <!-- Center the message -->
     }
 </div>
+
+<style>
+    /* Custom CSS styles */
+    .pagination .page-link {
+        color: #000; /* Change text color */
+    }
+
+        .pagination .page-link:hover {
+            color: black; /* Change text color on hover */
+        }
+
+    .pagination .page-item.active .page-link {
+        background-color: black; /* Change background color of active button */
+        border-color: black; /* Change border color of active button */
+    }
+
+    .pagination .page-link:focus {
+        box-shadow: none; /* Remove focus box shadow */
+    }
+</style>

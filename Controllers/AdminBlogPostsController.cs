@@ -1,5 +1,6 @@
 ﻿using CodeBlog.Models.Domain;
 using CodeBlog.Models.ViewModels;
+using CodeBlog.Repositories.Implementation;
 using CodeBlog.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -74,10 +75,36 @@ namespace CodeBlog.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string? searchQuery = null, string? selectedDate = null, int pageSize = 3, int pageNumber = 1)
         {
-            var blogPost = await blogPostRepository.GetAllAsync();
-            return View(blogPost);
+			//getting blogs to calculate the total pages based on this condition
+			var allPosts = await blogPostRepository.GetAllBlogsOfThisConditionAsync(searchQuery, selectedDate);
+
+			var totalPosts = allPosts.Count();
+
+			var totalPages = Math.Ceiling((decimal)totalPosts / pageSize);
+
+			//adding data to view bag
+			ViewBag.PageNumber = pageNumber;
+			ViewBag.TotalPages = totalPages;
+			ViewBag.PageSize = pageSize;
+			ViewBag.SearchQuery = searchQuery;
+			ViewBag.SelectedDate = selectedDate;
+
+
+			if (pageNumber > totalPages)
+			{
+				pageNumber--;
+			}
+
+			if (pageNumber < 1)
+			{
+				pageNumber++;
+			}
+
+			//getting all blogs
+			var blogPosts = await blogPostRepository.GetAllAsync(searchQuery, selectedDate, pageSize, pageNumber);
+            return View(blogPosts);
         }
 
         [HttpGet]

@@ -147,7 +147,7 @@
                             <td>@item.Name</td>
                             <td>@item.DisplayName</td>
                             <td>
-                                <a asp-controller="AdminTags" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                                <a asp-controller="AdminTags" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark">Edit</a>
                             </td>
                         </tr>
                     }
@@ -178,3 +178,24 @@
         <p class="text-center">No Tags Found !</p>
     }
 </div>
+
+
+<style>
+    /* Custom CSS styles */
+    .pagination .page-link {
+        color: #000; /* Change text color */
+    }
+
+        .pagination .page-link:hover {
+            color: black; /* Change text color on hover */
+        }
+
+    .pagination .page-item.active .page-link {
+        background-color: black; /* Change background color of active button */
+        border-color: black; /* Change border color of active button */
+    }
+
+    .pagination .page-link:focus {
+        box-shadow: none; /* Remove focus box shadow */
+    }
+</style>
