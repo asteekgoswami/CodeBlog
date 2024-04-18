@@ -51,8 +51,8 @@ namespace CodeBlog.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl )
         {
-			
-			var model = new LoginViewModel { ReturnUrl = returnUrl };
+
+            var model = new LoginViewModel { ReturnUrl = returnUrl };
 			return View(model);
         }
 
@@ -67,7 +67,8 @@ namespace CodeBlog.Controllers
 				{
 					if (!string.IsNullOrWhiteSpace(loginViewModel.ReturnUrl))
 					{
-						return Redirect(loginViewModel.ReturnUrl);
+						/*return  new RedirectResult(loginViewModel.ReturnUrl);*/
+                        return RedirectPermanent(loginViewModel.ReturnUrl);
 					}
 					return RedirectToAction("Index", "Home");
 				}

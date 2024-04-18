@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css' />
     <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
-
+    
     <style>
         body {
             margin: 0;
@@ -76,7 +76,7 @@
                         }
                         else
                         {
-                            <a class="btn me-3 bg-light text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            <a id="loginbutton" class="btn me-3 bg-light text-dark" asp-area="" asp-controller="Account" asp-action="Login" >Login</a>
                             <a class="btn me-3 bg-light text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             
                         }
@@ -113,5 +113,24 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        const url = window.location.href;
+        console.log(url);
+        if (url.includes("login") || url.includes("Login")) {
+
+        }
+        else {
+            localStorage.setItem('LastVisitedUrl', url);
+        }
+
+
+        console.log("Url is _")
+        var add = localStorage.getItem('LastVisitedUrl');
+        console.log(add)
+        document.getElementById("loginbutton").href += '?returnUrl=' + encodeURIComponent(add);
+       
+    </script>
+
 </body>
 </html>

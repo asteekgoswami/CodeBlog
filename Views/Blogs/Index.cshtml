@@ -1,107 +1,213 @@
 ﻿
 
 
+
+
+
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<IdentityUser> signInManager;
 @inject UserManager<IdentityUser> userManager;
 @model CodeBlog.Models.ViewModels.BlogDetailsViewModel
 
 @{
-	ViewData["Title"] = Model.PageTitle;
+    ViewData["Title"] = Model.PageTitle;
 }
 
+<style>
+
+    .blur-effect {
+        position: relative;
+    }
+
+        .blur-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.7));
+            pointer-events: none;
+            filter: blur(0.5px);
+        }
+
+    .lock-icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3rem;
+    }
+
+
+    #continueReadingBtn {
+        color: #000; /* Set button text color */
+        border-color: #000; /* Set border color */
+    }
+
+        #continueReadingBtn:hover,
+        #continueReadingBtn:focus {
+            background-color: #000; /* Set background color when hovered or focused */
+            color: #fff; /* Set text color when hovered or focused */
+        }
+
+
+
+    .blur-content {
+        max-height: 300px; /* Adjust as needed */
+        overflow: hidden;
+    }
+</style>
+
 <div class="container my-5 mb-5">
-	<div class="row justify-content-center">
-		<div class="col-10 col-lg-8">
-			@if (Model != null)
-			{
-				<h1 class="mb-3">@Model.Heading</h1>
-				<div class="d-flex justify-content-between mb-3">
-					<span class="text-secondary">@Model.Author</span>
-					<span class="text-secondary">@Model.PublishedDate</span>
-				</div>
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            @if (Model != null)
+            {
+                <h1 class="mb-3">@Model.Heading</h1>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-secondary">@Model.Author</span>
+                    <span class="text-secondary">@Model.PublishedDate</span>
+                </div>
 
-				<div class="mb-3">
-					@if (signInManager.IsSignedIn(User))
-					{
-						if (Model.Liked)
-						{
-							<a style="cursor:pointer">
-								<i class="bi bi-hand-thumbs-up-fill"></i>
-							</a>
-						}
-						else
-						{
-							<a id="btnLike" style="cursor:pointer">
-								<i class="bi bi-hand-thumbs-up"></i>
-							</a>
-						}
-					}
-					<span id="totalLikes">@Model.TotalLikes</span> likes
-				</div>
+                <div class="mb-3">
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        if (Model.Liked)
+                        {
+                            <a style="cursor:pointer">
+                                <i class="bi bi-hand-thumbs-up-fill"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a id="btnLike" style="cursor:pointer">
+                                <i class="bi bi-hand-thumbs-up"></i>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <span style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="bi bi-hand-thumbs-up"></i>
+                        </span>
+                    }
+                    <span id="totalLikes">@Model.TotalLikes</span> likes
+                </div>
 
-				<div class="mb-3 d-flex">
-					@foreach (var tag in Model.Tags)
-					{
-						<span class="badge bg-secondary me-1">@tag.Name</span>
-					}
-				</div>
 
-				<img src="@Model.FeaturedImageUrl" class="d-block img-fluid mb-3" />
+                <div class="mb-3 d-flex">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <span class="badge bg-secondary me-1">@tag.Name</span>
+                    }
+                </div>
 
-				<div class="mb-3 blog-details-content">
-					@Html.Raw(Model.Content)
-				</div>
+                <img src="@Model.FeaturedImageUrl" class="d-block img-fluid mb-3" />
 
-				<div class="card mb-5">
-					<div class="card-header">
-						<h5>Comments</h5>
-						@if (signInManager.IsSignedIn(User))
-						{
-							<div>
-								<form method="post">
-									<div class="mb-3">
-										<label class="form-label">Comment Description</label>
-										<input type="text" class="form-control" asp-for="CommentDescription" />
-									</div>
-									<div>
-										<button type="submit" class="btn btn-dark">Submit</button>
-										<input type="hidden" asp-for="Id" />
-										<input type="hidden" asp-for="UrlHandle" />
-									</div>
-								</form>
-							</div>
-						}
-					</div>
-					<div class="card-body">
-						@if (Model.Comments != null && Model.Comments.Any())
-						{
-							@foreach (var comment in Model.Comments)
-							{
-								<div class="card mb-3">
-									<div class="card-body">
-										<div>@comment.Description</div>
-									</div>
-									<div class="d-flex justify-content-between m-3">
-										<span class="text-secondary">@comment.Username</span>
-										<span class="text-secondary">@comment.DateAdded</span>
-									</div>
-								</div>
-							}
-						}
-					</div>
-				</div>
-			}
-			else
-			{
-				<p>No Blog exists</p>
-			}
-		</div>
-	</div>
+                //updated design
+                <div class="mb-3 blog-details-content">
+                    @if (signInManager.IsSignedIn(User) || Model.Visible)
+                    {
+                        @Html.Raw(Model.Content)
+                    }
+                    else
+                    {
+                        <div class="blur-effect position-relative">
+                            <div class="blur-effect-overlay"></div>
+                            <div class="lock-icon">
+                                <i class="bi bi-lock-fill"></i>
+                            </div>
+                            
+                            <div class="h-100 d-inline-block blur-content">
+                                @Html.Raw(Model.Content)
+                            </div>
+                        </div>
+                        <form asp-controller="Account" asp-action="login" method="get">
+                            <input type="hidden" id="returnUrl" name="returnUrl" value="">
+                            <input id="continueReadingBtn" class="btn btn-outline-dark  mt-3 d-block mx-auto w-25" type="submit" value="Continue Reading">
+                        </form>
+
+                       @*  <a id="continueReadingBtn" class="btn btn-outline-dark  mt-3 d-block mx-auto w-25" asp-controller="Account" asp-action="Login">Continue Reading</a> *@
+
+                    }
+                </div>
+
+
+
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h5>Comments</h5>
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <div>
+                                <form method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label">Comment Description</label>
+                                        <input type="text" class="form-control" asp-for="CommentDescription" />
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-dark">Submit</button>
+                                        <input type="hidden" asp-for="Id" />
+                                        <input type="hidden" asp-for="UrlHandle" />
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Comments != null && Model.Comments.Any())
+                        {
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div>@comment.Description</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between m-3">
+                                        <span class="text-secondary">@comment.Username</span>
+                                        <span class="text-secondary">@comment.DateAdded</span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p>No Blog exists</p>
+            }
+        </div>
+    </div>
 </div>
+
+
+
 
 @section Scripts {
 	<script>
+        const url = window.location.href;
+        console.log(url);
+        if (url.includes("login")) {
+
+        }
+        else {
+            localStorage.setItem('LastVisitedUrl', url);
+        }
+
+        console.log("Url is ")
+        console.log(localStorage.getItem('LastVisitedUrl'))
+        document.getElementById('returnUrl').value = localStorage.getItem('LastVisitedUrl');
+       
+
+
+
 		try {
 			const totalLikes = document.getElementById("totalLikes");
 			var btnLikeElement = document.getElementById("btnLike");
