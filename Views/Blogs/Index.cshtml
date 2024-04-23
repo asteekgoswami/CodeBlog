@@ -91,12 +91,12 @@
                             </a>
                         }
                     }
-                    else
+                    @* else
                     {
                         <span style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#loginModal">
                             <i class="bi bi-hand-thumbs-up"></i>
                         </span>
-                    }
+                    } *@
                     <span id="totalLikes">@Model.TotalLikes</span> likes
                 </div>
 
@@ -192,24 +192,15 @@
 
 @section Scripts {
 	<script>
-        const url = window.location.href;
-        console.log(url);
-        if (url.includes("login")) {
-
-        }
-        else {
-            localStorage.setItem('LastVisitedUrl', url);
-        }
-
-        console.log("Url is ")
-        console.log(localStorage.getItem('LastVisitedUrl'))
-        document.getElementById('returnUrl').value = localStorage.getItem('LastVisitedUrl');
-       
+      
 
 
 
 		try {
-			const totalLikes = document.getElementById("totalLikes");
+           
+
+            
+            const totalLikes = document.getElementById("totalLikes");
 			var btnLikeElement = document.getElementById("btnLike");
 			console.log("Like button pressed");
 
@@ -243,8 +234,25 @@
 			}
 
 			btnLikeElement.addEventListener('click', addLikeForBlog);
+
+
+           
 		} catch (error) {
 			console.error("Exception Occurred:", error);
 		}
+
+
+        const url = window.location.href;
+        console.log(url);
+        if (url.includes("login")) {
+
+        }
+        else {
+            localStorage.setItem('LastVisitedUrl', url);
+        }
+
+        console.log("Url is ")
+        console.log(localStorage.getItem('LastVisitedUrl'))
+        document.getElementById('returnUrl').value = localStorage.getItem('LastVisitedUrl');
 	</script>
 }

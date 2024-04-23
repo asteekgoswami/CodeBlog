@@ -5,6 +5,7 @@ using CodeBlog.Models.ViewModels;
 using CodeBlog.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 
 namespace CodeBlog.Controllers
@@ -30,6 +31,7 @@ namespace CodeBlog.Controllers
             ViewBag.SearchQuery = searchQuery;
             ViewBag.Tag = tag;
             ViewBag.SelectedDate = selectedDate;
+
 
 
             //getting all blogs

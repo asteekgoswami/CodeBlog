@@ -14,7 +14,7 @@
             <p class="lead text-center text-muted fs-5" style="font-weight: 700;">
                 Dive into <span class="text-dark font-weight-bold">JavaScript</span>, <span class="text-dark font-weight-bold">ASP.NET</span>, <span class="text-dark font-weight-bold">Web API,</span> and more with <span class="text-dark font-weight-bold">CodeBlog</span>
             </p>
-            <a  class="btn btn-dark mt-3" style="font-size: 1.3rem;" asp-controller="Home" asp-action="AllBlogs">All Blogs <i class="bi bi-arrow-right text-white m-2"></i></a>
+          @*   <a  class="btn btn-dark mt-3" style="font-size: 1.3rem;" asp-controller="Home" asp-action="AllBlogs">All Blogs <i class="bi bi-arrow-right text-white m-2"></i></a> *@
         </div>
 
         <!-- Image Column -->
@@ -77,10 +77,10 @@
         <div class="col-md-8">
             <form method="get" asp-controller="Home" asp-action="Index" class="row g-3 justify-content-center">
                 <div class="col-md-4">
-                    <input type="text" class="form-control" name="searchQuery" placeholder="Search query" value="@ViewBag.SearchQuery" />
+                    <input type="text" class="form-control" name="searchQuery" placeholder="Search query" value="@ViewBag.SearchQuery"  />
                 </div>
                 <div class="col-md-3">
-                    <input type="date" class="form-control" name="selectedDate" value="@ViewBag.SelectedDate" id="selectedDate" />
+                    <input type="date" class="form-control" name="selectedDate" value="@ViewBag.SelectedDate" id="selectedDate"  />
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-warning btn-block">Search</button>
@@ -99,26 +99,26 @@
                 {
                     foreach (var blogPost in Model.BlogPosts)
                     {
-                        <div class="col mb-4">
+                        <div class="col mb-4 " >
                             <div class="card h-100 shadow">
                                 <!-- Added Bootstrap shadow class -->
                                 <img src="@blogPost.FeaturedImageUrl" alt="@blogPost.Heading" class="card-img-top" style="object-fit: cover; height: 200px; border-top-left-radius: 10px; border-top-right-radius: 10px;" />
                                 <div class="card-body d-flex flex-column">
                                     <!-- Use flex-column to ensure button aligns to bottom -->
                                     <h5 class="card-title">@blogPost.Heading</h5>
-                                    <p class="card-text mb-2">Author: @blogPost.Author<br />Published Date: @blogPost.PublishedDate</p>
+                                    <p class="card-text mb-2">@blogPost.Author<br />@blogPost.PublishedDate</p>
                                     <div class="mb-2">
                                         @foreach (var tag in blogPost.Tags)
                                         {
                                             <span class="badge bg-secondary me-1">@tag.Name</span>
                                         }
                                     </div>
-                                    <div class="flex-grow-1">
+                                    <div class="flex-grow-1 ">
                                         <!-- Use flex-grow-1 to make this div take remaining space -->
                                         <!-- Check if description exists -->
                                         @if (!string.IsNullOrWhiteSpace(blogPost.ShortDescription))
                                         {
-                                            <p class="card-text" style="height: 60px; overflow: hidden;">@blogPost.ShortDescription</p>
+                                            <p class="card-text">@blogPost.ShortDescription</p>
                                         }
 
                                         else
@@ -135,7 +135,7 @@
                     //all blogs button
                     <a class="btn btn-dark mt-3 btn-block w-100 mb-5" style="font-size: 1.3rem;" asp-controller="Home" asp-action="AllBlogs">
                         <div class="d-flex align-items-center justify-content-center">
-                            <span>All Blogs</span>
+                            <span>View All</span>
                             <i class="bi bi-arrow-right text-white m-2"></i>
                         </div>
                     </a>
