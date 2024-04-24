@@ -70,7 +70,8 @@ namespace CodeBlog.Controllers
 						/*return  new RedirectResult(loginViewModel.ReturnUrl);*/
                         return RedirectPermanent(loginViewModel.ReturnUrl);
 					}
-					return RedirectToAction("Index", "Home");
+                   
+                    return RedirectToAction("Index", "Home");
 				}
 				else
 				{
@@ -80,6 +81,7 @@ namespace CodeBlog.Controllers
 					return View(loginViewModel);
 				}
 			}
+
            return View(loginViewModel);
         }
 

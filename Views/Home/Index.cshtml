@@ -110,7 +110,10 @@
                                     <div class="mb-2">
                                         @foreach (var tag in blogPost.Tags)
                                         {
-                                            <span class="badge bg-secondary me-1">@tag.Name</span>
+                                            <a asp-controller="Home" asp-action="SearchByTag" asp-route-tag="@tag.Name">
+                                                <span class="badge bg-secondary me-1">@tag.Name</span>
+                                            </a>
+                                            
                                         }
                                     </div>
                                     <div class="flex-grow-1 ">

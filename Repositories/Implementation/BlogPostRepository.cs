@@ -134,7 +134,34 @@ namespace CodeBlog.Repositories.Implementation
             return await query.ToListAsync();
         }
 
+        public async Task<IEnumerable<BlogPost>> GetAllByTagPageAsyncWithPagination(string? tag, string? searchQuery, string? selectedDate = null, int pageSize = 3, int pageNumber = 1)
+        {
+           var query = dbContext.BlogPosts.Include(x=>x.Tags).AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(tag))
+            {
+                query = query.Where(x => x.Tags.Any(t => t.Name == tag));
+            }
+
+            if (string.IsNullOrWhiteSpace(searchQuery) == false)
+            {
+                query = query.Where(x => x.PageTitle.Contains(searchQuery) || x.Heading.Contains(searchQuery) || x.Content.Contains(searchQuery) || x.Author.Contains(searchQuery) || x.ShortDescription.Contains(searchQuery) || x.UrlHandle.Contains(searchQuery));
+
+            }
+            if (!string.IsNullOrWhiteSpace(selectedDate))
+            {
+                query = query.Where(x => x.PublishedDate == selectedDate);
+            }
+
+
+            //pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+            query = query.Skip(skipResults).Take(pageSize);
+
+            return await query.ToListAsync();
+
+
+        }
 
         public async Task<BlogPost?> GetAsync(Guid id)
         {

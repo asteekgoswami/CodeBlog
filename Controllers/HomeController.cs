@@ -57,15 +57,36 @@ namespace CodeBlog.Controllers
         /// <param name="searchQuery"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> SearchByTag(string ? tag, string? searchQuery)
+        public async Task<IActionResult> SearchByTag(string ? tag, string? searchQuery, string? selectedDate = null, int pageSize = 2, int pageNumber = 1)
         {
-            ViewBag.SearchQuery = searchQuery;
             ViewBag.Tag = tag;
             //getting all blogs
             var blogPosts = await blogPostReposiory.GetAllByTagPageAsync( tag, searchQuery);
 
-            return View(blogPosts);
+            var totalPosts = blogPosts.Count();
 
+            var totalPages = Math.Ceiling((decimal)totalPosts / pageSize);
+
+            //adding data to view bag
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+            ViewBag.SearchQuery = searchQuery;
+            ViewBag.SelectedDate = selectedDate;
+
+            if (pageNumber > totalPages)
+            {
+                pageNumber--;
+            }
+
+            if (pageNumber < 1)
+            {
+                pageNumber++;
+            }
+
+            var finalBlogPostResult = await blogPostReposiory.GetAllByTagPageAsyncWithPagination(tag,searchQuery, selectedDate,pageSize,pageNumber);
+
+            return View(finalBlogPostResult);
 
         }
 

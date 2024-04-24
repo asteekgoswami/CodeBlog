@@ -22,6 +22,8 @@ namespace CodeBlog.Repositories.Interface
 
         Task<IEnumerable<BlogPost>> GetAllByTagPageAsync(string? tag=null , string? serachQuery=null);
 
+        Task<IEnumerable<BlogPost>> GetAllByTagPageAsyncWithPagination(string? tag, string? searchQuery, string? selectedDate = null, int pageSize = 3, int pageNumber = 1);
+
         Task<int> CountAllPostAsync();
     }
 }
