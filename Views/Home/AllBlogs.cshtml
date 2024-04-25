@@ -45,7 +45,7 @@
                                 <div class="card-body d-flex flex-column">
                                     <!-- Use flex-column to ensure button aligns to bottom -->
                                     <h5 class="card-title">@blogPost.Heading</h5>
-                                    <p class="card-text mb-2">Author: @blogPost.Author<br />Published Date: @blogPost.PublishedDate</p>
+                                    <p class="card-text mb-2">@blogPost.Author<br />@blogPost.PublishedDate</p>
                                     <div class="mb-2">
                                         @foreach (var tag in blogPost.Tags)
                                         {

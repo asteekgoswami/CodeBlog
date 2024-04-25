@@ -75,7 +75,7 @@ namespace CodeBlog.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> List(string? searchQuery = null, string? selectedDate = null, int pageSize = 3, int pageNumber = 1)
+        public async Task<IActionResult> List(string? searchQuery = null, string? selectedDate = null, int pageSize = 6, int pageNumber = 1)
         {
 			//getting blogs to calculate the total pages based on this condition
 			var allPosts = await blogPostRepository.GetAllBlogsOfThisConditionAsync(searchQuery, selectedDate);

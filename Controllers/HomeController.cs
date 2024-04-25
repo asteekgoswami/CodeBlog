@@ -57,7 +57,7 @@ namespace CodeBlog.Controllers
         /// <param name="searchQuery"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> SearchByTag(string ? tag, string? searchQuery, string? selectedDate = null, int pageSize = 2, int pageNumber = 1)
+        public async Task<IActionResult> SearchByTag(string ? tag, string? searchQuery, string? selectedDate = null, int pageSize = 6, int pageNumber = 1)
         {
             ViewBag.Tag = tag;
             //getting all blogs
@@ -97,7 +97,7 @@ namespace CodeBlog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> AllBlogs(string? searchQuery = null, string? selectedDate = null, int pageSize=3, int pageNumber=1)
+        public async Task<IActionResult> AllBlogs(string? searchQuery = null, string? selectedDate = null, int pageSize=6, int pageNumber=1)
         {
             //getting blogs to calculate the total pages based on this condition
             var allPosts = await blogPostReposiory.GetAllBlogsOfThisConditionAsync(searchQuery, selectedDate);

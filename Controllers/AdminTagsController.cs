@@ -50,7 +50,7 @@ namespace CodeBlog.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> List(string? searchQuery, string ? shortBy, string? sortDirection, int pageSize=2, int pageNumber=1)
+        public async Task<IActionResult> List(string? searchQuery, string ? shortBy, string? sortDirection, int pageSize=4, int pageNumber=1)
         {
             var totalRecords = await tagRepository.CountAsync();
             var totalPages = Math.Ceiling((decimal)totalRecords / pageSize);
