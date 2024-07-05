@@ -43,7 +43,7 @@ CodeBlog is a robust blog site built using ASP.NET MVC, designed to facilitate s
     ```
 
 5. **Open in browser**
-    - Navigate to `http://localhost:5000` to see the site in action.
+    - Navigate to `http://localhost:7214` to see the site in action.
 
 ## Usage
 
